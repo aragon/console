@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@1hive/connect-disputable-delay@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@1hive/connect-disputable-delay/-/connect-disputable-delay-0.1.0.tgz#0ee9ed6bc33e754b87ae00c2e34419b875c530cd"
+  integrity sha512-noR1JgTn3AK8nx64y5jOHzdCrbNjc2vsmV0d5dCVAQ12ybbCWF5VKBZFrtn/ieeafRyfR+42R7kEkDDtbaxiKQ==
+  dependencies:
+    "@aragon/connect" "^0.8.0-alpha.2"
+    "@aragon/connect-core" "^0.8.0-alpha.2"
+    "@aragon/connect-thegraph" "^0.8.0-alpha.2"
+    graphql-tag "^2.10.3"
+
 "@apollo/react-common@^3.1.4":
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/@apollo/react-common/-/react-common-3.1.4.tgz#ec13c985be23ea8e799c9ea18e696eccc97be345"
@@ -37,7 +47,7 @@
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
 
-"@aragon/connect-core@^0.8.0-alpha.4":
+"@aragon/connect-core@^0.8.0-alpha.2", "@aragon/connect-core@^0.8.0-alpha.4":
   version "0.8.0-alpha.4"
   resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.4.tgz#cc25fe76496e573ef5d5f3585ee90672932c2812"
   integrity sha512-SiuZUcmm5SNHB9mteSUoChoeJ5arOUbnEBDAWRSQgQo6hPSaWhy98yqwToPRU2ZbPCsPmbeVZA5yActKTQ0vTQ==
@@ -79,7 +89,7 @@
     isomorphic-ws "^4.0.1"
     subscriptions-transport-ws "^0.9.16"
 
-"@aragon/connect-thegraph@^0.8.0-alpha.4":
+"@aragon/connect-thegraph@^0.8.0-alpha.2", "@aragon/connect-thegraph@^0.8.0-alpha.4":
   version "0.8.0-alpha.4"
   resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.8.0-alpha.4.tgz#1a4efe27328e3efc61b0ea543cd0ce3d87e01b71"
   integrity sha512-i9vHdjkHIfj6wum8oan+q1HeVH/f5u3UXA5d8XDVcuRruzaOR4WDy5/ul15k/Y8Se1Zg3Rop9ifizr/9S784sQ==
@@ -101,7 +111,7 @@
     "@aragon/connect-ethereum" "^0.7.0"
     "@aragon/connect-thegraph" "^0.7.0"
 
-"@aragon/connect@^0.8.0-alpha.4":
+"@aragon/connect@^0.8.0-alpha.2", "@aragon/connect@^0.8.0-alpha.4":
   version "0.8.0-alpha.4"
   resolved "https://registry.yarnpkg.com/@aragon/connect/-/connect-0.8.0-alpha.4.tgz#88f9ec93917a6e8db5bcf94ef91e29ea08502ee3"
   integrity sha512-x6hX21LXtS8VJNwgzzSPuiQTPX5WvYaXknnGhchn8kIdCaslCPJy7JxrjIDzHTx94cOC2jOfmApP5I3UE20UEw==
