@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Box, Button, Field, GU, TextInput } from '@aragon/ui'
 import 'styled-components/macro'
 
 export default function DaoSelector() {
@@ -15,33 +14,47 @@ export default function DaoSelector() {
   }, [daoAddress, history])
 
   return (
-    <Box>
-      <Field
-        label="Dao Address"
-        css={`
-          width: 100%;
-        `}
-      >
-        <TextInput
+    <form
+      css={`
+        padding: 8px;
+        margin-top: ${4 * 8}px;
+        border: 1px solid whitesmoke;
+      `}
+    >
+      <label>
+        Enter DAO address
+        <input
+          type="input"
           onChange={handleChangeDaoAddress}
           placeholder="0xbeef..."
           value={daoAddress}
           css={`
+            margin-top: 12px;
             width: 100%;
+            color: black;
           `}
         />
+      </label>
+      <button
+        label="Go to DAO"
+        onClick={handleGoToDao}
+        disabled={!daoAddress}
+        css={`
+          margin-top: 16px;
+          font-family: 'Overpass Mono', monospace;
+          font-size: 12px;
+          position: relative;
+          background: transparent;
+          color: white;
+          cursor: pointer;
 
-        <Button
-          label="Go to DAO"
-          onClick={handleGoToDao}
-          disabled={!daoAddress}
-          css={`
-            margin-top: ${2 * GU}px;
-          `}
-        >
-          Go to DAO
-        </Button>
-      </Field>
-    </Box>
+          &:active {
+            top: 1px;
+          }
+        `}
+      >
+        Go to DAO
+      </button>
+    </form>
   )
 }

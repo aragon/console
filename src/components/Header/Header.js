@@ -1,52 +1,56 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useWallet } from 'use-wallet'
 import { GU } from '@aragon/ui'
-import AccountModule from '../Account/AccountModule'
 import 'styled-components/macro'
+import { shortenAddress } from '../../lib/web3-utils'
 
-const Header = React.memo(function Header() {
+function Header() {
+  const wallet = useWallet()
+
+  const handleWalletConnection = useCallback(() => {
+    wallet.status === 'connected' ? wallet.reset() : wallet.connect('injected')
+  }, [wallet])
+
   return (
     <header
       css={`
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 3;
-        height: ${8 * GU}px;
-        background: #fff;
-        box-shadow: rgba(0, 0, 0, 0.05) 0 2px 3px;
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-left: ${2 * GU}px;
-        padding-right: ${2 * GU}px;
-        min-width: 100vw;
+        width: 100%;
+        border: 1px solid whitesmoke;
+        padding: 8px;
       `}
     >
-      <div
+      <h1
         css={`
           flex-grow: 1;
+          font-weight: bold;
+          font-size: 24px;
+          text-decoration: underline;
         `}
       >
-        Console
-      </div>
-      <div
+        Aragon Console
+      </h1>
+      <button
+        onClick={handleWalletConnection}
         css={`
-          flex-grow: 0;
-          display: flex;
-          height: 100%;
+          font-family: 'Overpass Mono', monospace;
+          font-size: 12px;
+          position: relative;
+          background: transparent;
+          color: white;
+          cursor: pointer;
+
+          &:active {
+            top: 1px;
+          }
         `}
       >
-        <div
-          css={`
-            display: flex;
-            height: 100%;
-          `}
-        >
-          <AccountModule />
-        </div>
-      </div>
+        {wallet.status === 'connected'
+          ? shortenAddress(wallet.account)
+          : 'Connect to web3'}
+      </button>
     </header>
   )
-})
+}
 
 export default Header

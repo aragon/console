@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
-import { Header } from '@aragon/ui'
+import { useHistory, useParams } from 'react-router-dom'
+
+import 'styled-components/macro'
 
 // Frontends
 import Agreement from './Agreement/Agreement'
@@ -13,6 +14,8 @@ const KNOWN_APPS = new Map([
 ])
 
 export default function Apps({ apps }) {
+  const history = useHistory()
+  console.log(history)
   const { appAddress } = useParams()
   console.log(appAddress, apps)
 
@@ -26,13 +29,38 @@ export default function Apps({ apps }) {
   )
 
   if (!matchingView) {
-    return <Header primary="Generic View" />
+    return <h2>Generic View</h2>
   }
 
   return (
     <>
-      <Header primary={title} />
-      <MatchingView appData={matchingApp} />
+      <button
+        type="button"
+        onClick={() => history.goBack()}
+        css={`
+          margin-top: 8px;
+          font-family: 'Overpass Mono', monospace;
+          font-size: 16px;
+          position: relative;
+          background: transparent;
+          color: white;
+          cursor: pointer;
+          border: 0px;
+          text-decoration: underline;
+        `}
+      >
+        Back
+      </button>
+      <div
+        css={`
+          padding: 8px;
+          margin-top: ${1 * 8}px;
+          border: 1px solid whitesmoke;
+        `}
+      >
+        <h2>{title}</h2>
+        <MatchingView appData={matchingApp} />
+      </div>
     </>
   )
 }

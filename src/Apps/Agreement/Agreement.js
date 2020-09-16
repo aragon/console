@@ -2,15 +2,6 @@ import React, { useState } from 'react'
 import 'styled-components/macro'
 import { useWallet } from 'use-wallet'
 import {
-  Box,
-  Button,
-  GU,
-  IdentityBadge,
-  Info,
-  Link,
-  textStyle,
-} from '@aragon/ui'
-import {
   useAgreementSettings,
   useSignAgreement,
 } from '../../lib/web3-contracts.js'
@@ -44,105 +35,84 @@ export default function Agreement({ appData: agreement }) {
   console.log(settings)
 
   return (
-    <Box>
+    <>
       <div
         css={`
-          margin-top: ${2 * GU}px;
+          margin-top: ${2 * 8}px;
         `}
       >
-        <h2
-          css={`
-            ${textStyle('title2')}
-          `}
-        >
-          Address
-        </h2>
-        <IdentityBadge entity={agreement.address} />
+        <h2>Address</h2>
+        <p>{agreement.address}</p>
       </div>
-      <Button
-        label="Sign"
-        mode="strong"
+      <button
+        type="button"
         onClick={async () => {
           const signState = await signAgreement()
           setSignState(signState)
         }}
         disabled={!account}
         css={`
-          margin-top: ${2 * GU}px;
+          margin-top: 16px;
+          font-family: 'Overpass Mono', monospace;
+          font-size: 12px;
+          position: relative;
+          background: transparent;
+          color: white;
+          cursor: pointer;
+
+          &:active {
+            top: 1px;
+          }
         `}
       >
         Sign Agreement
-      </Button>
+      </button>
       {signState && (
-        <Info
-          mode={getInfoMode(signState)}
+        <div
           css={`
-            margin-top: ${3 * GU}px;
+            border: 1px solid #00f400;
+            margin-top: ${3 * 8}px;
           `}
         >
           {getInfoText(signState)}
-        </Info>
+        </div>
       )}
       <div
         css={`
-          margin-top: ${2 * GU}px;
+          margin-top: ${2 * 8}px;
         `}
       >
-        <h2
-          css={`
-            ${textStyle('title2')}
-          `}
-        >
-          Arbitrator
-        </h2>
-        <IdentityBadge entity={settings?.arbitrator} />
+        <h2>Arbitrator</h2>
+        <p>{settings?.arbitrator}</p>
       </div>
       <div
         css={`
-          margin-top: ${2 * GU}px;
+          margin-top: ${2 * 8}px;
         `}
       >
-        <h2
-          css={`
-            ${textStyle('title2')}
-          `}
-        >
-          Staking pool factory
-        </h2>
-        <IdentityBadge entity={settings?.cashier} />
+        <h2>Staking pool factory</h2>
+        <p>{settings?.cashier} </p>
       </div>
       <div
         css={`
-          margin-top: ${2 * GU}px;
+          margin-top: ${2 * 8}px;
         `}
       >
-        <h2
-          css={`
-            ${textStyle('title2')}
-          `}
-        >
-          Agreement Title: {settings?.title}
-        </h2>
+        <h2>Agreement Title: {settings?.title}</h2>
       </div>
       <div
         css={`
-          margin-top: ${2 * GU}px;
+          margin-top: ${2 * 8}px;
         `}
       >
-        <h2
-          css={`
-            ${textStyle('title2')}
-          `}
-        >
-          Agreement content
-        </h2>
+        <h2>Agreement content</h2>
       </div>
-      <Link
+      <a
         href={`https://ipfs.eth.aragon.network/ipfs/${settings?.content}`}
-        external
+        rel="noopener noreferrer"
       >
         Content on IPFS
-      </Link>
-    </Box>
+      </a>
+    </>
   )
 }

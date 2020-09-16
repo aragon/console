@@ -7,7 +7,6 @@ import {
   useParams,
 } from 'react-router-dom'
 import { Connect, useApps, useOrganization } from '@aragon/connect-react'
-import { Card, GU, Header } from '@aragon/ui'
 import 'styled-components/macro'
 
 import AppsRouter from './Apps/Apps'
@@ -38,7 +37,7 @@ function DaoView() {
         <AppsRouter apps={apps} />
       </Route>
       <Route>
-        <Header>not found :(</Header>
+        <h2>not found :(</h2>
       </Route>
     </Switch>
   )
@@ -46,10 +45,17 @@ function DaoView() {
 
 function AppList({ apps }) {
   return (
-    <>
-      <Header>Apps</Header>
+    <div
+      css={`
+        padding: 8px;
+        margin-top: ${4 * 8}px;
+        border: 1px solid whitesmoke;
+      `}
+    >
+      <h2>Apps</h2>
       <div
         css={`
+          margin-top: 24px;
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
@@ -59,7 +65,7 @@ function AppList({ apps }) {
           <AppCard app={app} key={app.address} />
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
@@ -72,17 +78,28 @@ function AppCard({ app }) {
   }, [app, history, url])
 
   return (
-    <Card
+    <button
+      type="button"
       onClick={handleCardClick}
       css={`
+        position: relative;
+        background: transparent;
+        width: 280px;
+        height: 320px;
+        border: 1px solid #00f400;
+        padding: 16px;
+        cursor: pointer;
         &:not(:last-child) {
-          margin-right: ${3 * GU}px;
-          margin-bottom: ${3 * GU}px;
+          margin-right: 24px;
+          margin-bottom: 24px;
+        }
+        &:active {
+          top: 1px;
         }
       `}
     >
       {app.name}
-    </Card>
+    </button>
   )
 }
 
