@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { useWallet } from 'use-wallet'
-import { GU } from '@aragon/ui'
 import 'styled-components/macro'
 import { shortenAddress } from '../../lib/web3-utils'
 
