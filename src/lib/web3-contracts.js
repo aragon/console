@@ -143,7 +143,6 @@ export function useAgreementSettings(agreementAddress) {
           title,
           content,
         ] = await agreement.getSetting(currentSettingId)
-        console.log(content, EthersUtils.toUtf8String(content))
         const utfContent = EthersUtils.toUtf8String(content)
         const [, ipfsCid] = utfContent.split(':')
         setSettings({

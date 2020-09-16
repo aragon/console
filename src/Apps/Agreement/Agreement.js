@@ -32,8 +32,6 @@ export default function Agreement({ appData: agreement }) {
   const signAgreement = useSignAgreement(agreement.address)
   const settings = useAgreementSettings(agreement.address)
 
-  console.log(settings)
-
   return (
     <>
       <div

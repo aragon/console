@@ -112,7 +112,7 @@
     "@aragon/connect-ethereum" "^0.7.0"
     "@aragon/connect-thegraph" "^0.7.0"
 
-"@aragon/connect@^0.8.0-alpha.2", "@aragon/connect@^0.8.0-alpha.4":
+"@aragon/connect@^0.8.0-alpha.2":
   version "0.8.0-alpha.4"
   resolved "https://registry.yarnpkg.com/@aragon/connect/-/connect-0.8.0-alpha.4.tgz#88f9ec93917a6e8db5bcf94ef91e29ea08502ee3"
   integrity sha512-x6hX21LXtS8VJNwgzzSPuiQTPX5WvYaXknnGhchn8kIdCaslCPJy7JxrjIDzHTx94cOC2jOfmApP5I3UE20UEw==

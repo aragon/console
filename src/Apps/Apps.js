@@ -13,11 +13,9 @@ const KNOWN_APPS = new Map([
   ['disputable-delay', DisputableDelay],
 ])
 
-export default function Apps({ apps }) {
+export default function Apps({ apps, org }) {
   const history = useHistory()
-  console.log(history)
   const { appAddress } = useParams()
-  console.log(appAddress, apps)
 
   const matchingApp = apps.find(({ address }) => address === appAddress)
   const matchingView = KNOWN_APPS.get(matchingApp.name)
@@ -59,7 +57,11 @@ export default function Apps({ apps }) {
         `}
       >
         <h2>{title}</h2>
-        <MatchingView appData={matchingApp} />
+        {matchingView ? (
+          <MatchingView appData={matchingApp} apps={apps} org={org} />
+        ) : (
+          <h2> Generic View </h2>
+        )}
       </div>
     </>
   )

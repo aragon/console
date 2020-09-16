@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { describeScript } from '@aragon/connect-react'
 import connectDisputableDelay from '@1hive/connect-disputable-delay'
 
 export function useDisputableDelay(disputableDelayApp) {
@@ -38,7 +39,7 @@ export function useDisputableDelay(disputableDelayApp) {
   return [disputableDelay, loading]
 }
 
-export function useDelayedScripts(disputableDelay) {
+export function useDelayedScripts(disputableDelay, apps) {
   const [delayedScripts, setDelayedScripts] = useState(null)
   const [delayedScriptsLoading, setDelayedScriptsLoading] = useState(true)
 
@@ -52,6 +53,11 @@ export function useDelayedScripts(disputableDelay) {
     async function getDelayedScripts() {
       const delayedScripts = await disputableDelay.delayedScripts()
 
+      const processedScripts = delayedScripts.map(script => {
+        const describedScript = describeScript(script.evmScript, apps)
+        return { ...script, processedEvmScript: describedScript }
+      })
+
       if (!cancelled) {
         setDelayedScripts(delayedScripts)
         setDelayedScriptsLoading(false)
@@ -63,7 +69,7 @@ export function useDelayedScripts(disputableDelay) {
     return () => {
       cancelled = true
     }
-  }, [disputableDelay])
+  }, [disputableDelay, apps])
 
   return [delayedScripts, delayedScriptsLoading]
 }

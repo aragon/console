@@ -34,7 +34,7 @@ function DaoView() {
         <AppList apps={apps} />
       </Route>
       <Route path={`${path}/:appAddress`}>
-        <AppsRouter apps={apps} />
+        <AppsRouter apps={apps} org={org} />
       </Route>
       <Route>
         <h2>not found :(</h2>
