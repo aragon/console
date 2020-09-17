@@ -83,13 +83,11 @@ export function useDelayedScripts(disputableDelay, apps) {
 export function useChallengeAction(apps) {
   const agreementAddress = apps.find(app => app.name.includes('agreement'))
     .address
-  console.log(agreementAddress)
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
 
   return useCallback(
     async (actionId, settlementOffer, evidence) => {
       if (!agreement) {
-        console.log('rip')
         return
       }
       try {
@@ -116,18 +114,16 @@ export function useChallengeAction(apps) {
 export function useDisputeAction(apps) {
   const agreementAddress = apps.find(app => app.name.includes('agreement'))
     .address
-  console.log(agreementAddress)
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
 
   return useCallback(
-    async (actionId, settlementOffer, evidence) => {
+    async actionId => {
       if (!agreement) {
-        console.log('rip')
         return
       }
       try {
-        const canChallenge = await agreement.canDispute(actionId)
-        if (!canChallenge) {
+        const canDispute = await agreement.canDispute(actionId)
+        if (!canDispute) {
           return 'CANNOT_DISPUTE'
         }
         await agreement.disputeAction(actionId, false)
@@ -135,6 +131,62 @@ export function useDisputeAction(apps) {
       } catch (e) {
         console.error(e)
         return 'ERROR_DISPUTE'
+      }
+    },
+    [agreement],
+  )
+}
+
+export function useExecuteScript(apps) {
+  const disputableDelayAddress = apps.find(app =>
+    app.name.includes('disputable-delay'),
+  ).address
+  const disputableDelay = useContractWithKnownAbi(
+    'DISPUTABLE_DELAY',
+    disputableDelayAddress,
+  )
+
+  return useCallback(
+    async id => {
+      if (!disputableDelay) {
+        return
+      }
+      try {
+        const canExecute = await disputableDelay.canExecute(id)
+        if (!canExecute) {
+          return 'CANNOT_EXECUTE'
+        }
+        await disputableDelay.execute(id)
+        return 'OK_EXECUTE'
+      } catch (e) {
+        console.error(e)
+        return 'ERROR_DISPUTE'
+      }
+    },
+    [disputableDelay],
+  )
+}
+
+export function useSettleAction(apps) {
+  const agreementAddress = apps.find(app => app.name.includes('agreement'))
+    .address
+  const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
+
+  return useCallback(
+    async actionId => {
+      if (!agreement) {
+        return
+      }
+      try {
+        const canSettle = await agreement.canSettle(actionId)
+        if (!canSettle) {
+          return 'CANNOT_SETTLE'
+        }
+        await agreement.settleAction(actionId)
+        return 'OK_SETTLE'
+      } catch (e) {
+        console.error(e)
+        return 'ERROR_SETTLE'
       }
     },
     [agreement],

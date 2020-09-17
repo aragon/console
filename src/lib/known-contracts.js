@@ -1,4 +1,5 @@
 import agreementAbi from './abi/agreement.json'
+import disputableDelayAbi from './abi/disputableDelay.json'
 
 const KNOWN_CONTRACTS_BY_ENV = new Map([
   [
@@ -9,7 +10,10 @@ const KNOWN_CONTRACTS_BY_ENV = new Map([
   ],
 ])
 
-const ABIS = new Map([['AGREEMENT', agreementAbi]])
+const ABIS = new Map([
+  ['AGREEMENT', agreementAbi],
+  ['DISPUTABLE_DELAY', disputableDelayAbi],
+])
 
 export function getKnownContract(name) {
   const knownContracts = KNOWN_CONTRACTS_BY_ENV.get('4') || {}

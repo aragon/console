@@ -3,7 +3,10 @@ import 'styled-components/macro'
 import {
   useChallengeAction,
   useDelayedScripts,
+  useDisputeAction,
   useDisputableDelay,
+  useExecuteScript,
+  useSettleAction,
 } from './hooks/useDisputableDelay'
 
 export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
@@ -16,6 +19,9 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
   )
 
   const challenge = useChallengeAction(apps)
+  const dispute = useDisputeAction(apps)
+  const execute = useExecuteScript(apps)
+  const settle = useSettleAction(apps)
 
   const appLoading = disputableDelayLoading || delayedScriptsLoading
 
@@ -78,9 +84,12 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
                   flex-wrap: wrap;
                 `}
               >
-                <Button>Execute</Button>
+                <Button onClick={() => execute(delayedScriptId)}>
+                  Execute
+                </Button>
                 <Button onClick={() => challenge(actionId)}>Challenge</Button>
-                <Button>Dispute</Button>
+                <Button onClick={() => dispute(actionId)}>Dispute</Button>
+                <Button onClick={() => settle(actionId)}>Settle</Button>
               </div>
             </div>
           ),
