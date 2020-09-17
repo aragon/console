@@ -39,6 +39,9 @@ function Header() {
           color: white;
           cursor: pointer;
 
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+          }
           &:active {
             top: 1px;
           }

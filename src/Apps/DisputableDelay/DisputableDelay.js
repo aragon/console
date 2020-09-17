@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import 'styled-components/macro'
 import {
   useDelayedScripts,
@@ -33,43 +33,86 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
             disputeId,
             evmScript,
             executedAt,
-            executionFromTime,
+            executionStatus,
             pausedAt,
             settledAt,
             submitter,
           }) => (
-            <dl
+            <div
               key={actionId}
               css={`
                 border: 1px solid whitesmoke;
                 padding: 8px;
               `}
             >
-              <dt>Action Id</dt>
-              <dd>{actionId}</dd>
-              <dt>Delayed Script ID</dt>
-              <dd>{delayedScriptId}</dd>
-              <dt>Challenger address</dt>
-              <dd>{challenger}</dd>
-              <dt>Context</dt>
-              <dd>{context}</dd>
-              <dt>Delayed Script Status</dt>
-              <dd>{delayedScriptStatus}</dd>
-              <dt>evmScript</dt>
-              <dd
+              <dl>
+                <dt>Action Id</dt>
+                <dd>{actionId}</dd>
+                <dt>Delayed Script ID</dt>
+                <dd>{delayedScriptId}</dd>
+                <dt>Challenger address</dt>
+                <dd>{challenger}</dd>
+                <dt>Context</dt>
+                <dd>{context}</dd>
+                <dt>Delayed Script Status</dt>
+                <dd>{delayedScriptStatus}</dd>
+                <dt>evmScript</dt>
+                <dd
+                  css={`
+                    word-wrap: break-word;
+                  `}
+                >
+                  {evmScript}
+                </dd>
+                <dt>Time left for execution</dt>
+                <dd>{executionStatus}</dd>
+                <dt>Submitter</dt>
+                <dd>{submitter}</dd>
+              </dl>
+              <div
                 css={`
-                  word-wrap: break-word;
+                  display: flex;
+                  flex-wrap: wrap;
                 `}
               >
-                {evmScript}
-              </dd>
-              <dt>Execution from time</dt>
-              <dd>{executionFromTime}</dd>
-              <dt>Submitter</dt>
-              <dd>{submitter}</dd>
-            </dl>
+                <Button>Execute</Button>
+                <Button>Challenge</Button>
+                <Button>Dispute</Button>
+              </div>
+            </div>
           ),
         )}
     </div>
+  )
+}
+
+function Button({ children, disabled, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      css={`
+        position: relative;
+        margin-top: 8px;
+        font-family: 'Overpass Mono', monospace;
+        font-size: 16px;
+        background: transparent;
+        color: white;
+        cursor: pointer;
+        border: 1px solid whitesmoke;
+        text-decoration: underline;
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+        &:active {
+          top: 1px;
+        }
+        &:not(:last-child) {
+          margin-right: 8px;
+        }
+      `}
+    >
+      {children}
+    </button>
   )
 }

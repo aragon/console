@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { describeScript } from '@aragon/connect-react'
 import connectDisputableDelay from '@1hive/connect-disputable-delay'
+import { getExecutionTimeFromUnix } from '../../../lib/date-utils'
 
 export function useDisputableDelay(disputableDelayApp) {
   const [disputableDelay, setDisputableDelay] = useState(null)
@@ -54,12 +55,16 @@ export function useDelayedScripts(disputableDelay, apps) {
       const delayedScripts = await disputableDelay.delayedScripts()
 
       const processedScripts = delayedScripts.map(script => {
-        const describedScript = describeScript(script.evmScript, apps)
-        return { ...script, processedEvmScript: describedScript }
+        const executionDate = getExecutionTimeFromUnix(script.executionFromTime)
+
+        return {
+          ...script,
+          executionStatus: executionDate,
+        }
       })
 
       if (!cancelled) {
-        setDelayedScripts(delayedScripts)
+        setDelayedScripts(processedScripts)
         setDelayedScriptsLoading(false)
       }
     }
