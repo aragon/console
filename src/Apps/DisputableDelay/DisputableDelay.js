@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import 'styled-components/macro'
 import {
   useChallengeAction,
@@ -81,19 +81,134 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
               <div
                 css={`
                   display: flex;
-                  flex-wrap: wrap;
+                  flex-direction: column;
                 `}
               >
-                <Button onClick={() => execute(delayedScriptId)}>
-                  Execute
-                </Button>
-                <Button onClick={() => challenge(actionId)}>Challenge</Button>
-                <Button onClick={() => dispute(actionId)}>Dispute</Button>
-                <Button onClick={() => settle(actionId)}>Settle</Button>
+                <h2>Actions</h2>
+                <div
+                  css={`
+                    max-width: 800px;
+                  `}
+                >
+                  <ChallengeSection actionId={actionId} onClick={challenge} />
+                  <DisputeSection actionId={actionId} onClick={dispute} />
+                  <SettleSection actionId={actionId} onClick={settle} />
+                  <ExecuteSection
+                    delayedScriptId={delayedScriptId}
+                    onClick={execute}
+                  />
+                </div>
               </div>
             </div>
           ),
         )}
+    </div>
+  )
+}
+
+function ExecuteSection({ delayedScriptId, onClick }) {
+  const handleExecute = useCallback(async () => {
+    await onClick(delayedScriptId)
+  }, [delayedScriptId, onClick])
+
+  return (
+    <div
+      css={`
+        border: 1px solid whitesmoke;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+      `}
+    >
+      <h3> Execute </h3>
+      <Button onClick={handleExecute}>Execute</Button>
+    </div>
+  )
+}
+
+function ChallengeSection({ actionId, onClick }) {
+  const [offer, setOffer] = useState('')
+  const [evidence, setEvidence] = useState('')
+
+  const handleChallenge = useCallback(async () => {
+    await onClick(actionId, offer, evidence)
+  }, [actionId, evidence, offer, onClick])
+
+  return (
+    <div
+      css={`
+        border: 1px solid whitesmoke;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+      `}
+    >
+      <h3> Challenge </h3>
+      <label>
+        Settlement offer (in Wei)
+        <input
+          type="input"
+          placeholder="1000000000000000000..."
+          value={offer}
+          onChange={e => setOffer(e.target.value)}
+          css={`
+            color: black;
+          `}
+        />
+      </label>
+      <label>
+        Evidence (plain text or IPFS CID)
+        <input
+          type="input"
+          placeholder="IPFS CID"
+          value={evidence}
+          onChange={e => setEvidence(e.target.value)}
+          css={`
+            color: black;
+          `}
+        />
+      </label>
+      <Button onClick={handleChallenge}>Challenge</Button>
+    </div>
+  )
+}
+
+function DisputeSection({ actionId, onClick }) {
+  const handleDispute = useCallback(async () => {
+    await onClick(actionId)
+  }, [actionId])
+
+  return (
+    <div
+      css={`
+        border: 1px solid whitesmoke;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+      `}
+    >
+      <h3> Dispute </h3>
+      <Button onClick={handleDispute}>Challenge</Button>
+    </div>
+  )
+}
+
+function SettleSection({ actionId, onClick }) {
+  const handleSettle = useCallback(async () => {
+    await onClick(actionId)
+  }, [actionId])
+
+  return (
+    <div
+      css={`
+        border: 1px solid whitesmoke;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+      `}
+    >
+      <h3> Settle </h3>
+      <Button onClick={handleSettle}>Challenge</Button>
     </div>
   )
 }
