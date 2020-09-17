@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import 'styled-components/macro'
 import {
+  useChallengeAction,
   useDelayedScripts,
   useDisputableDelay,
 } from './hooks/useDisputableDelay'
@@ -13,6 +14,8 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
     disputableDelay,
     apps,
   )
+
+  const challenge = useChallengeAction(apps)
 
   const appLoading = disputableDelayLoading || delayedScriptsLoading
 
@@ -76,7 +79,7 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
                 `}
               >
                 <Button>Execute</Button>
-                <Button>Challenge</Button>
+                <Button onClick={() => challenge(actionId)}>Challenge</Button>
                 <Button>Dispute</Button>
               </div>
             </div>
