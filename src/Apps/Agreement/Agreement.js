@@ -108,6 +108,7 @@ export default function Agreement({ appData: agreement }) {
       <a
         href={`https://ipfs.eth.aragon.network/ipfs/${settings?.content}`}
         rel="noopener noreferrer"
+        target="_blank"
       >
         Content on IPFS
       </a>

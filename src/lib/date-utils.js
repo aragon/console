@@ -8,9 +8,7 @@ export function getExecutionTimeFromUnix(futureTimestamp) {
 
   if (minutesDiff <= 0) {
     const secondsDiff = executionTime.diff(now, 's')
-    return executionTime.diff(now, 's') <= 0
-      ? 'Executable'
-      : `0m ${secondsDiff}s`
+    return executionTime.diff(now, 's') <= 0 ? 'None' : `0m ${secondsDiff}s`
   }
 
   return `${minutesDiff}m`

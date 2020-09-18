@@ -4,10 +4,12 @@ import { useHistory, useParams } from 'react-router-dom'
 import 'styled-components/macro'
 
 // Frontends
+import Agent from './Agent/Agent'
 import Agreement from './Agreement/Agreement'
 import DisputableDelay from './DisputableDelay/DisputableDelay'
 
 const KNOWN_APPS = new Map([
+  ['agent', Agent],
   ['agreement', Agreement],
   ['agreement-1hive', Agreement],
   ['disputable-delay', DisputableDelay],
