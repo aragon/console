@@ -8,7 +8,6 @@ import { useContractWithKnownAbi } from '../../../lib/web3-contracts'
 import { useWallet } from 'use-wallet'
 
 const ONE_MILLION = new BN('1000000000000000000000000')
-const ZERO = new BN('0')
 
 export function useDisputableDelay(disputableDelayApp) {
   const [disputableDelay, setDisputableDelay] = useState(null)
