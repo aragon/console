@@ -1,5 +1,6 @@
 import agreementAbi from './abi/agreement.json'
 import disputableDelayAbi from './abi/disputableDelay.json'
+import erc20Abi from './abi/erc20.json'
 
 const KNOWN_CONTRACTS_BY_ENV = new Map([
   [
@@ -13,6 +14,7 @@ const KNOWN_CONTRACTS_BY_ENV = new Map([
 const ABIS = new Map([
   ['AGREEMENT', agreementAbi],
   ['DISPUTABLE_DELAY', disputableDelayAbi],
+  ['TOKEN', erc20Abi]
 ])
 
 export function getKnownContract(name) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import 'styled-components/macro'
 import { useWallet } from 'use-wallet'
+import connectAgreement from '@aragon/connect-agreement'
 import {
   useAgreementSettings,
   useSignAgreement,
@@ -31,6 +32,20 @@ export default function Agreement({ appData: agreement }) {
   const [signState, setSignState] = useState('')
   const signAgreement = useSignAgreement(agreement.address)
   const settings = useAgreementSettings(agreement.address)
+
+  React.useEffect(() => {
+    async function get() {
+      const agreementApp = await connectAgreement(agreement, [
+        'thegraph',
+        {
+          network: 4,
+        },
+      ])
+
+      console.log(agreementApp)
+    }
+    get()
+  }, [agreement])
 
   return (
     <>

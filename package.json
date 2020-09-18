@@ -5,7 +5,7 @@
   "dependencies": {
     "@1hive/connect-disputable-delay": "^0.1.4",
     "@apollo/react-hooks": "^3.1.5",
-    "@aragon/connect-agreement": "^0.0.0-beta.9",
+    "@aragon/connect-agreement": "^0.0.0-beta.14",
     "@aragon/connect-react": "^0.7.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -13,6 +13,7 @@
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link-http": "^1.5.17",
+    "bn.js": "^5.1.3",
     "clipboard-polyfill": "^2.8.6",
     "dayjs": "^1.8.35",
     "ethers": "^4.0.47",

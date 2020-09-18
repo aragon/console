@@ -1,8 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
-import { describeScript } from '@aragon/connect-react'
+import BN from 'bn.js'
+import { utils as EthersUtils } from 'ethers'
 import connectDisputableDelay from '@1hive/connect-disputable-delay'
+
 import { getExecutionTimeFromUnix } from '../../../lib/date-utils'
 import { useContractWithKnownAbi } from '../../../lib/web3-contracts'
+import { useWallet } from 'use-wallet'
+
+const ONE_MILLION = new BN('1000000000000000000000000')
+const ZERO = new BN('0')
 
 export function useDisputableDelay(disputableDelayApp) {
   const [disputableDelay, setDisputableDelay] = useState(null)
@@ -39,6 +45,32 @@ export function useDisputableDelay(disputableDelayApp) {
   }, [disputableDelayApp])
 
   return [disputableDelay, loading]
+}
+
+export function useCollateralRequirements(disputableDelay) {
+  const [collateral, setCollateral] = useState(null)
+  const [loading, setLoading] = useState(null)
+
+  useEffect(() => {
+    if (!disputableDelay) {
+      return
+    }
+    let cancelled = false
+
+    async function getCollateralRequirement() {
+      const collateralRequirement = await disputableDelay.currentCollateralRequirement()
+      if (!cancelled) {
+        setCollateral(collateralRequirement)
+      }
+    }
+    getCollateralRequirement()
+
+    return () => {
+      cancelled = true
+    }
+  }, [disputableDelay])
+
+  return [collateral, loading]
 }
 
 export function useDelayedScripts(disputableDelay, apps) {
@@ -80,14 +112,16 @@ export function useDelayedScripts(disputableDelay, apps) {
   return [delayedScripts, delayedScriptsLoading]
 }
 
-export function useChallengeAction(apps) {
+export function useChallengeAction(apps, feeToken) {
+  const { account } = useWallet()
   const agreementAddress = apps.find(app => app.name.includes('agreement'))
     .address
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
+  const tokenContract = useContractWithKnownAbi('TOKEN', feeToken)
 
   return useCallback(
     async (actionId, settlementOffer, evidence) => {
-      if (!agreement) {
+      if (!agreement || !feeToken) {
         return
       }
       try {
@@ -95,11 +129,23 @@ export function useChallengeAction(apps) {
         if (!canChallenge) {
           return 'CANNOT_CHALLENGE'
         }
+        const allowance = await tokenContract.allowance(
+          account,
+          agreementAddress,
+        )
+        if (allowance.eq('0')) {
+          await tokenContract.approve(agreementAddress, ONE_MILLION)
+        }
+        const bytesEvidence = EthersUtils.toUtf8Bytes(evidence)
+        const hexEvidence = EthersUtils.hexlify(bytesEvidence)
         await agreement.challengeAction(
           actionId,
           settlementOffer,
           false,
-          evidence,
+          hexEvidence,
+          {
+            gasLimit: 1000000,
+          },
         )
         return 'OK_CHALLENGE'
       } catch (e) {
@@ -107,18 +153,20 @@ export function useChallengeAction(apps) {
         return 'ERROR_CHALLENGE'
       }
     },
-    [agreement],
+    [agreement, agreementAddress, tokenContract],
   )
 }
 
-export function useDisputeAction(apps) {
+export function useDisputeAction(apps, feeToken) {
+  const { account } = useWallet()
   const agreementAddress = apps.find(app => app.name.includes('agreement'))
     .address
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
+  const tokenContract = useContractWithKnownAbi('TOKEN', feeToken)
 
   return useCallback(
     async actionId => {
-      if (!agreement) {
+      if (!agreement || !feeToken) {
         return
       }
       try {
@@ -126,14 +174,23 @@ export function useDisputeAction(apps) {
         if (!canDispute) {
           return 'CANNOT_DISPUTE'
         }
-        await agreement.disputeAction(actionId, false)
+        const allowance = await tokenContract.allowance(
+          account,
+          agreementAddress,
+        )
+        if (allowance.eq('0')) {
+          await tokenContract.approve(agreementAddress, ONE_MILLION)
+        }
+        await agreement.disputeAction(actionId, false, {
+          gasLimit: 1000000,
+        })
         return 'OK_DISPUTE'
       } catch (e) {
         console.error(e)
         return 'ERROR_DISPUTE'
       }
     },
-    [agreement],
+    [agreement, agreementAddress, tokenContract],
   )
 }
 
@@ -167,14 +224,14 @@ export function useExecuteScript(apps) {
   )
 }
 
-export function useSettleAction(apps) {
+export function useSettleAction(apps, feeToken) {
   const agreementAddress = apps.find(app => app.name.includes('agreement'))
     .address
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
 
   return useCallback(
     async actionId => {
-      if (!agreement) {
+      if (!agreement || !feeToken) {
         return
       }
       try {
@@ -189,6 +246,6 @@ export function useSettleAction(apps) {
         return 'ERROR_SETTLE'
       }
     },
-    [agreement],
+    [agreement, feeToken],
   )
 }

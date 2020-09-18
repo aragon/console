@@ -7,6 +7,7 @@ import {
   useDisputableDelay,
   useExecuteScript,
   useSettleAction,
+  useCollateralRequirements,
 } from './hooks/useDisputableDelay'
 
 export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
@@ -17,11 +18,13 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
     disputableDelay,
     apps,
   )
-
-  const challenge = useChallengeAction(apps)
-  const dispute = useDisputeAction(apps)
-  const execute = useExecuteScript(apps)
-  const settle = useSettleAction(apps)
+  const [collateral, collateralLoading] = useCollateralRequirements(
+    disputableDelay,
+  )
+  const challenge = useChallengeAction(apps, collateral?.tokenId)
+  const dispute = useDisputeAction(apps, collateral?.tokenId)
+  const execute = useExecuteScript(apps, collateral?.tokenId)
+  const settle = useSettleAction(apps, collateral?.tokenId)
 
   const appLoading = disputableDelayLoading || delayedScriptsLoading
 
@@ -176,7 +179,7 @@ function ChallengeSection({ actionId, onClick }) {
 function DisputeSection({ actionId, onClick }) {
   const handleDispute = useCallback(async () => {
     await onClick(actionId)
-  }, [actionId])
+  }, [actionId, onClick])
 
   return (
     <div

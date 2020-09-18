@@ -31,13 +31,13 @@
     ts-invariant "^0.4.4"
     tslib "^1.10.0"
 
-"@aragon/connect-agreement@^0.0.0-beta.9":
-  version "0.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.9.tgz#36c217f0cd5ac0931787ff3b30f9872b10fb3837"
-  integrity sha512-WGdUUywMLqPg/uDCVzb/FhbNmTX+h026aOl8gZnDrPWsgQwn5WRqCxMwyenomrNzRIUpku7PsGpblLH/Sl5gLw==
+"@aragon/connect-agreement@^0.0.0-beta.14":
+  version "0.0.0-beta.14"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.14.tgz#df14ed06f16edff23f5e724d16d3a56ba49fcae1"
+  integrity sha512-8iQxMsf/10KRwYrW1w4hi+bQUCIDScxywxY3IIDE5bN0KJiRh1TyrHz+eD4GRJmdJITdEj7MsBxADOzgtPbhlQ==
   dependencies:
-    "@aragon/connect-core" "^0.8.0-alpha.4"
-    "@aragon/connect-thegraph" "^0.8.0-alpha.4"
+    "@aragon/connect-core" "^0.8.0-alpha.5"
+    "@aragon/connect-thegraph" "^0.8.0-alpha.5"
     graphql-tag "^2.10.3"
 
 "@aragon/connect-core@^0.7.0":
@@ -52,6 +52,14 @@
   version "0.8.0-alpha.4"
   resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.4.tgz#cc25fe76496e573ef5d5f3585ee90672932c2812"
   integrity sha512-SiuZUcmm5SNHB9mteSUoChoeJ5arOUbnEBDAWRSQgQo6hPSaWhy98yqwToPRU2ZbPCsPmbeVZA5yActKTQ0vTQ==
+  dependencies:
+    ethers "^5.0.7"
+    radspec "^2.0.0-rc.2"
+
+"@aragon/connect-core@^0.8.0-alpha.5", "@aragon/connect-core@^0.8.0-alpha.6":
+  version "0.8.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.6.tgz#169e332402286d4c4518646abcabf100aeb8e9fd"
+  integrity sha512-0yQ02f1GKvrHjN5MrZ0sr12Qdpu9ijNRx5ZGqwP5AV4OIJ9ukxIHFTlJgjZtsK21XL0sjpWNBC3y0znUXdpwKw==
   dependencies:
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
@@ -96,6 +104,19 @@
   integrity sha512-i9vHdjkHIfj6wum8oan+q1HeVH/f5u3UXA5d8XDVcuRruzaOR4WDy5/ul15k/Y8Se1Zg3Rop9ifizr/9S784sQ==
   dependencies:
     "@aragon/connect-core" "^0.8.0-alpha.4"
+    "@urql/core" "^1.11.7"
+    graphql "^15.0.0"
+    graphql-tag "^2.10.3"
+    isomorphic-unfetch "^3.0.0"
+    isomorphic-ws "^4.0.1"
+    subscriptions-transport-ws "^0.9.16"
+
+"@aragon/connect-thegraph@^0.8.0-alpha.5":
+  version "0.8.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.8.0-alpha.6.tgz#26af1db65ff0a5d92fdfd36237933d337f486c57"
+  integrity sha512-YGDBd110aZqad542cUFJP8j1X1bvpWA4IlDsoJj2P+jUwIzgHBPK3LC0QP1p9WnxOkCEJvLAj+VDnhuQDh/7Hw==
+  dependencies:
+    "@aragon/connect-core" "^0.8.0-alpha.6"
     "@urql/core" "^1.11.7"
     graphql "^15.0.0"
     graphql-tag "^2.10.3"
@@ -4060,7 +4081,7 @@ bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.0, bn.js@^4.11.1, bn.js@^4.11.6, bn.js@^
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.9.tgz#26d556829458f9d1e81fc48952493d0ba3507828"
   integrity sha512-E6QoYqCKZfgatHTdHzs1RRKP7ip4vvm+EyRUeE2RF0NblwVvb0p6jSVeNTOFxPn26QXN2o6SMfNxKp6kU8zQaw==
 
-bn.js@^5.1.2:
+bn.js@^5.1.2, bn.js@^5.1.3:
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.1.3.tgz#beca005408f642ebebea80b042b4d18d2ac0ee6b"
   integrity sha512-GkTiFpjFtUzU9CbMeJ5iazkCzGL3jrhzerzZIuqLABjbwRaFt33I9tUdSNryIptM+RxDet6OKm2WnLXzW51KsQ==
