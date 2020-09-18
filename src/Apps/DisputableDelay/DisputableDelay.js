@@ -191,7 +191,7 @@ function DisputeSection({ actionId, onClick }) {
       `}
     >
       <h3> Dispute </h3>
-      <Button onClick={handleDispute}>Challenge</Button>
+      <Button onClick={handleDispute}>Dispute</Button>
     </div>
   )
 }
@@ -199,7 +199,7 @@ function DisputeSection({ actionId, onClick }) {
 function SettleSection({ actionId, onClick }) {
   const handleSettle = useCallback(async () => {
     await onClick(actionId)
-  }, [actionId])
+  }, [actionId, onClick])
 
   return (
     <div
@@ -211,7 +211,7 @@ function SettleSection({ actionId, onClick }) {
       `}
     >
       <h3> Settle </h3>
-      <Button onClick={handleSettle}>Challenge</Button>
+      <Button onClick={handleSettle}>Settle</Button>
     </div>
   )
 }
