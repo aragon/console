@@ -1,5 +1,5 @@
 import env from '../environment'
-import Ethers from 'ethers'
+import { utils as EthersUtils } from 'ethers'
 import { solidityKeccak256, id as keccak256 } from 'ethers/utils'
 export const soliditySha3 = solidityKeccak256
 export const hash256 = keccak256
@@ -8,8 +8,6 @@ export const ETH_FAKE_ADDRESS = `0x${''.padEnd(40, '0')}`
 
 const ETH_ADDRESS_SPLIT_REGEX = /(0x[a-fA-F0-9]{40}(?:\b|\.|,|\?|!|;))/g
 const ETH_ADDRESS_TEST_REGEX = /(0x[a-fA-F0-9]{40}(?:\b|\.|,|\?|!|;))/g
-
-const EthersUtils = Ethers.utils
 
 export function bigNum(value) {
   return new EthersUtils.BigNumber(value)

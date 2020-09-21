@@ -1,10 +1,12 @@
 import { useEffect, useCallback, useMemo, useState, useRef } from 'react'
-import Ethers, { Contract as EthersContract, providers } from 'ethers'
+import {
+  Contract as EthersContract,
+  providers,
+  utils as EthersUtils,
+} from 'ethers'
 import { useWallet } from 'use-wallet'
 import { getKnownContract } from './known-contracts.js'
 import { bigNum, getNetworkNode } from './web3-utils'
-
-const EthersUtils = Ethers.utils
 
 export function useContract(address, abi, signer = true) {
   const { ethereum } = useWallet()
