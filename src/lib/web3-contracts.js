@@ -1,12 +1,10 @@
-import { useEffect, useCallback, useState, useRef } from 'react'
-import {
-  Contract as EthersContract,
-  providers,
-  utils as EthersUtils,
-} from 'ethers'
+import { useEffect, useCallback, useMemo, useState, useRef } from 'react'
+import Ethers, { Contract as EthersContract, providers } from 'ethers'
 import { useWallet } from 'use-wallet'
 import { getKnownContract } from './known-contracts.js'
-import { bigNum } from './web3-utils'
+import { bigNum, getNetworkNode } from './web3-utils'
+
+const EthersUtils = Ethers.utils
 
 export function useContract(address, abi, signer = true) {
   const { ethereum } = useWallet()
@@ -38,6 +36,23 @@ export function useKnownContract(name, signer = true) {
 export function useContractWithKnownAbi(name, address) {
   const [, abi] = getKnownContract(name)
   return useContract(address, abi, true)
+}
+
+export function useContractReadOnly(name, address) {
+  const ethEndpoint = getNetworkNode()
+  const [, abi] = getKnownContract(name)
+
+  const ethProvider = useMemo(
+    () => (ethEndpoint ? new providers.JsonRpcProvider(ethEndpoint) : null),
+    [ethEndpoint],
+  )
+
+  return useMemo(() => {
+    if (!address) {
+      return null
+    }
+    return new EthersContract(address, abi, ethProvider)
+  }, [abi, address, ethProvider])
 }
 
 export function useTokenBalance(symbol, address = '') {

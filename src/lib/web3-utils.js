@@ -1,5 +1,5 @@
 import env from '../environment'
-import { utils as EthersUtils } from 'ethers'
+import Ethers from 'ethers'
 import { solidityKeccak256, id as keccak256 } from 'ethers/utils'
 export const soliditySha3 = solidityKeccak256
 export const hash256 = keccak256
@@ -8,6 +8,8 @@ export const ETH_FAKE_ADDRESS = `0x${''.padEnd(40, '0')}`
 
 const ETH_ADDRESS_SPLIT_REGEX = /(0x[a-fA-F0-9]{40}(?:\b|\.|,|\?|!|;))/g
 const ETH_ADDRESS_TEST_REGEX = /(0x[a-fA-F0-9]{40}(?:\b|\.|,|\?|!|;))/g
+
+const EthersUtils = Ethers.utils
 
 export function bigNum(value) {
   return new EthersUtils.BigNumber(value)
@@ -128,6 +130,13 @@ export function getNetworkType(chainId = env('CHAIN_ID')) {
   return DEFAULT_LOCAL_CHAIN
 }
 
+export function getNetworkNode(chainId = env('CHAIN_ID')) {
+  chainId = String(chainId)
+
+  if (chainId === '1') return 'https://mainnet.eth.aragon.network/'
+  if (chainId === '4') return 'https://rinkeby.eth.aragon.network/'
+}
+
 export function sanitizeNetworkType(networkType) {
   if (networkType === 'private') {
     return 'localhost'
@@ -161,55 +170,6 @@ export function transformAddresses(str, callback) {
     .map((part, index) =>
       callback(part, ETH_ADDRESS_TEST_REGEX.test(part), index),
     )
-}
-
-/**
- * Format an amount of units to be displayed.
- *
- * @param {BigNumber|String} value Amount of units to format.
- * @param {Number} options.digits Amount of digits on the token.
- * @param {Boolean} options.commas Use comma-separated groups.
- * @param {Boolean} options.replaceZeroBy The string to be returned when value is zero.
- * @param {Number} options.truncateToDecimalPlace Number of decimal places to show.
- */
-export function formatUnits(
-  value,
-  {
-    digits = 18,
-    commas = true,
-    replaceZeroBy = '',
-    truncateToDecimalPlace,
-  } = {},
-) {
-  if (typeof value === 'string') {
-    value = EthersUtils.bigNumberify(value)
-  }
-
-  if (value.lt(0) || digits < 0) {
-    return ''
-  }
-
-  let valueBeforeCommas = EthersUtils.formatUnits(value.toString(), digits)
-
-  // Replace 0 by an empty value
-  if (valueBeforeCommas === '0.0') {
-    return replaceZeroBy
-  }
-
-  // EthersUtils.formatUnits() adds a decimal even when 0, this removes it.
-  valueBeforeCommas = valueBeforeCommas.replace(/\.0$/, '')
-
-  if (typeof truncateToDecimalPlace === 'number') {
-    const [whole = '', dec = ''] = valueBeforeCommas.split('.')
-    if (dec) {
-      const truncatedDec = dec
-        .slice(0, truncateToDecimalPlace)
-        .replace(/0*$/, '')
-      valueBeforeCommas = truncatedDec ? `${whole}.${truncatedDec}` : whole
-    }
-  }
-
-  return commas ? EthersUtils.commify(valueBeforeCommas) : valueBeforeCommas
 }
 export async function signMessage(wallet, message) {
   let signHash
