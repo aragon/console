@@ -29,8 +29,7 @@
     "use-wallet": "^0.8.0"
   },
   "scripts": {
-    "sync-assets": "copy-aragon-ui-assets ./public",
-    "start": "npm run sync-assets && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

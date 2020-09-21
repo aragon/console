@@ -26,7 +26,8 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
   const execute = useExecuteScript(apps, collateral?.tokenId)
   const settle = useSettleAction(apps, collateral?.tokenId)
 
-  const appLoading = disputableDelayLoading || delayedScriptsLoading
+  const appLoading =
+    disputableDelayLoading || delayedScriptsLoading || collateralLoading
 
   return (
     <div>

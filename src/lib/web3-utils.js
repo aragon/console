@@ -17,6 +17,16 @@ export function getFunctionSignature(func) {
   return keccak256(func).slice(0, 10)
 }
 
+export function getNetworkName(chainId) {
+  chainId = String(chainId)
+
+  if (chainId === '1') return 'Mainnet'
+  if (chainId === '4') return 'Rinkeby'
+  if (chainId === '100') return 'xDai'
+
+  return 'Unknown'
+}
+
 export function getUseWalletProviders() {
   const providers = [{ id: 'injected' }, { id: 'frame' }]
 
@@ -116,16 +126,6 @@ export function getNetworkType(chainId = env('CHAIN_ID')) {
   if (chainId === '4') return 'rinkeby'
 
   return DEFAULT_LOCAL_CHAIN
-}
-
-export function getNetworkName(chainId = env('CHAIN_ID')) {
-  chainId = String(chainId)
-
-  if (chainId === '1') return 'Mainnet'
-  if (chainId === '3') return 'Ropsten'
-  if (chainId === '4') return 'Rinkeby'
-
-  return 'unknown'
 }
 
 export function sanitizeNetworkType(networkType) {

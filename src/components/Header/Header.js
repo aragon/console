@@ -1,14 +1,27 @@
-import React, { useCallback } from 'react'
-import { useWallet } from 'use-wallet'
+import React, { useCallback, useEffect } from 'react'
+import { ChainUnsupportedError } from 'use-wallet'
 import 'styled-components/macro'
-import { shortenAddress } from '../../lib/web3-utils'
+import { useChainId } from '../../Providers/ChainId'
+import { useWallet } from '../../Providers/Wallet'
+import { shortenAddress, getNetworkName } from '../../lib/web3-utils'
 
 function Header() {
+  const { chainId } = useChainId()
   const wallet = useWallet()
 
   const handleWalletConnection = useCallback(() => {
     wallet.status === 'connected' ? wallet.reset() : wallet.connect('injected')
   }, [wallet])
+
+  useEffect(() => {
+    if (wallet.error && wallet.error instanceof ChainUnsupportedError) {
+      alert(
+        `Wrong network. Please connect to the ${getNetworkName(
+          chainId,
+        )} network.`,
+      )
+    }
+  }, [chainId, wallet])
 
   return (
     <header
