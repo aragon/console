@@ -1,13 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createGlobalStyle } from 'styled-components'
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-import { UseWalletProvider } from 'use-wallet'
-import { ApolloProvider } from '@apollo/react-hooks'
 import App from './App'
-import env from './environment'
+import GeneralProvider from './Providers/GeneralProvider'
 import 'styled-components/macro'
 
 const GlobalStyle = createGlobalStyle`
@@ -49,33 +44,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const SUBGRAPH_HTTP_URL = env('SUBGRAPH_HTTP_ENDPOINT')
-const CHAIN_ID = Number(env('CHAIN_ID'))
-
-const cache = new InMemoryCache()
-const link = new HttpLink({
-  uri: SUBGRAPH_HTTP_URL,
-})
-
-const client = new ApolloClient({
-  cache,
-  link,
-})
-
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <UseWalletProvider
-      chainId={CHAIN_ID}
-      connectors={{
-        fortmatic: { apiKey: env('FORTMATIC_API_KEY') },
-        portis: { dAppId: env('PORTIS_DAPP_ID') },
-      }}
-    >
-      <React.StrictMode>
-        <GlobalStyle />
-        <App />
-      </React.StrictMode>
-    </UseWalletProvider>
-  </ApolloProvider>,
+  <GeneralProvider>
+    <React.StrictMode>
+      <GlobalStyle />
+      <App />
+    </React.StrictMode>
+  </GeneralProvider>,
   document.getElementById('root'),
 )

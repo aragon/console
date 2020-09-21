@@ -48,7 +48,7 @@ export function useDisputableDelay(disputableDelayApp) {
 
 export function useCollateralRequirements(disputableDelay) {
   const [collateral, setCollateral] = useState(null)
-  const [loading, setLoading] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!disputableDelay) {
@@ -60,6 +60,7 @@ export function useCollateralRequirements(disputableDelay) {
       const collateralRequirement = await disputableDelay.currentCollateralRequirement()
       if (!cancelled) {
         setCollateral(collateralRequirement)
+        setLoading(false)
       }
     }
     getCollateralRequirement()
@@ -152,7 +153,7 @@ export function useChallengeAction(apps, feeToken) {
         return 'ERROR_CHALLENGE'
       }
     },
-    [agreement, agreementAddress, tokenContract],
+    [account, agreement, agreementAddress, feeToken, tokenContract],
   )
 }
 
@@ -189,7 +190,7 @@ export function useDisputeAction(apps, feeToken) {
         return 'ERROR_DISPUTE'
       }
     },
-    [agreement, agreementAddress, tokenContract],
+    [account, agreement, agreementAddress, feeToken, tokenContract],
   )
 }
 
