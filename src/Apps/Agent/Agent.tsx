@@ -1,7 +1,14 @@
 import React from 'react'
+import { App, Organization } from '@aragon/connect-react'
 import 'styled-components/macro'
 
-export default function Agent({ appData: agentApp }) {
+type AgentProps = {
+  appData: App
+  apps: App[]
+  org: Organization
+}
+
+export default function Agent({ appData: agentApp }: AgentProps) {
   return (
     <div
       css={`

@@ -3,6 +3,7 @@ const CHAIN_ID_DEFAULT = 4
 
 const ENV_VARS = {
   CHAIN_ID() {
+    // @ts-ignore
     const chainId = parseInt(process.env.REACT_APP_CHAIN_ID)
     return isNaN(chainId) ? CHAIN_ID_DEFAULT : chainId
   },
@@ -24,7 +25,8 @@ const ENV_VARS = {
   },
 }
 
-export default function env(name) {
+export default function env(name: string) {
+  // @ts-ignore
   const envVar = ENV_VARS[name]
   return typeof envVar === 'function' ? envVar() : null
 }

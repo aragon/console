@@ -6,10 +6,12 @@ import {
   useRouteMatch,
   useParams,
 } from 'react-router-dom'
-import { Connect, useApps, useOrganization } from '@aragon/connect-react'
+import { App, Connect, useApps, useOrganization } from '@aragon/connect-react'
 import 'styled-components/macro'
 
 import AppsRouter from './Apps/Apps'
+
+import { useChainId } from './Providers/ChainId'
 
 function DaoView() {
   const { path } = useRouteMatch()
@@ -34,7 +36,7 @@ function DaoView() {
         <AppList apps={apps} />
       </Route>
       <Route path={`${path}/:appAddress`}>
-        <AppsRouter apps={apps} org={org} />
+        <AppsRouter apps={apps} org={org!} />
       </Route>
       <Route>
         <h2>not found :(</h2>
@@ -43,7 +45,11 @@ function DaoView() {
   )
 }
 
-function AppList({ apps }) {
+type AppListProps = {
+  apps: App[]
+}
+
+function AppList({ apps }: AppListProps) {
   return (
     <div
       css={`
@@ -69,7 +75,11 @@ function AppList({ apps }) {
   )
 }
 
-function AppCard({ app }) {
+type AppCardProps = {
+  app: App
+}
+
+function AppCard({ app }: AppCardProps) {
   const history = useHistory()
   const { url } = useRouteMatch()
 
@@ -104,13 +114,14 @@ function AppCard({ app }) {
 }
 
 export default function WrappedDaoView() {
-  const { daoAddress } = useParams()
+  const { daoAddress }: any = useParams()
+  const { chainId } = useChainId()
 
   return (
     <Connect
       location={daoAddress}
       connector="thegraph"
-      options={{ name: 'rinkeby', network: 4 }}
+      options={{ network: chainId }}
     >
       <DaoView />
     </Connect>

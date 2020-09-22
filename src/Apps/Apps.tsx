@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { App, Organization } from '@aragon/connect-react'
 
 import 'styled-components/macro'
 
 // Frontends
-import Agent from './Agent/Agent.tsx'
+import Agent from './Agent/Agent'
 import Agreement from './Agreement/Agreement'
 import DisputableDelay from './DisputableDelay/DisputableDelay'
 
@@ -15,17 +16,23 @@ const KNOWN_APPS = new Map([
   ['disputable-delay', DisputableDelay],
 ])
 
-export default function Apps({ apps, org }) {
+type AppsProps = {
+  apps: App[]
+  org: Organization
+}
+
+export default function Apps({ apps, org }: AppsProps) {
   const history = useHistory()
-  const { appAddress } = useParams()
+  const { appAddress }: any = useParams()
 
   const matchingApp = apps.find(({ address }) => address === appAddress)
-  const matchingView = KNOWN_APPS.get(matchingApp.name)
+  // TODO: add "no app matched" view
+  const matchingView = KNOWN_APPS.get(matchingApp!.name!)
 
   const MatchingView = useMemo(() => matchingView, [matchingView])
   const title = useMemo(
-    () => matchingApp.name.replace(/\b\w/g, c => c.toUpperCase()),
-    [matchingApp.name],
+    () => matchingApp!.name!.replace(/\b\w/g, c => c.toUpperCase()),
+    [matchingApp],
   )
 
   if (!matchingView) {
@@ -59,11 +66,8 @@ export default function Apps({ apps, org }) {
         `}
       >
         <h2>{title}</h2>
-        {matchingView ? (
-          <MatchingView appData={matchingApp} apps={apps} org={org} />
-        ) : (
-          <h2> Generic View </h2>
-        )}
+        {/* @ts-ignore */}
+        <MatchingView appData={matchingApp} apps={apps} org={org} />
       </div>
     </>
   )
