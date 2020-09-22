@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import 'styled-components/macro'
 
 export default function DaoSelector() {
-  const [daoAddress, setDaoAddress] = useState('')
+  const [daoAddress, setDaoAddress] = useState<string>('')
   const history = useHistory()
 
   const handleChangeDaoAddress = useCallback(e => {
@@ -36,7 +36,6 @@ export default function DaoSelector() {
         />
       </label>
       <button
-        label="Go to DAO"
         onClick={handleGoToDao}
         disabled={!daoAddress}
         css={`

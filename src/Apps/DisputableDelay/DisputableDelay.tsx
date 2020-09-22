@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { App, Organization } from '@aragon/connect-react'
 import 'styled-components/macro'
 import {
   useChallengeAction,
@@ -10,20 +11,29 @@ import {
   useCollateralRequirements,
 } from './hooks/useDisputableDelay'
 
-export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
-  const [disputableDelay, disputableDelayLoading] = useDisputableDelay(
+type DisputableDelayProps = {
+  appData: App
+  apps: App[]
+  org: Organization
+}
+
+export default function DisputableDelay({
+  appData: disputableDelayApp,
+  apps,
+}: DisputableDelayProps) {
+  const [disputableDelay, disputableDelayLoading]: any = useDisputableDelay(
     disputableDelayApp,
   )
-  const [delayedScripts, delayedScriptsLoading] = useDelayedScripts(
+  const [delayedScripts, delayedScriptsLoading]: any = useDelayedScripts(
     disputableDelay,
     apps,
   )
-  const [collateral, collateralLoading] = useCollateralRequirements(
+  const [collateral, collateralLoading]: any = useCollateralRequirements(
     disputableDelay,
   )
   const challenge = useChallengeAction(apps, collateral?.tokenId)
   const dispute = useDisputeAction(apps, collateral?.tokenId)
-  const execute = useExecuteScript(apps, collateral?.tokenId)
+  const execute = useExecuteScript(apps)
   const settle = useSettleAction(apps, collateral?.tokenId)
 
   const appLoading =
@@ -50,7 +60,7 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
             pausedAt,
             settledAt,
             submitter,
-          }) => (
+          }: any) => (
             <div
               key={actionId}
               css={`
@@ -110,9 +120,23 @@ export default function DisputableDelay({ appData: disputableDelayApp, apps }) {
   )
 }
 
-function ExecuteSection({ delayedScriptId, onClick }) {
+type ExecuteSectionProps = {
+  delayedScriptId: string
+  onClick: Function
+}
+
+function ExecuteSection({ delayedScriptId, onClick }: ExecuteSectionProps) {
+  const [loading, setLoading] = useState<boolean>(false)
+
   const handleExecute = useCallback(async () => {
-    await onClick(delayedScriptId)
+    setLoading(true)
+    try {
+      await onClick(delayedScriptId)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
   }, [delayedScriptId, onClick])
 
   return (
@@ -125,17 +149,32 @@ function ExecuteSection({ delayedScriptId, onClick }) {
       `}
     >
       <h3> Execute </h3>
-      <Button onClick={handleExecute}>Execute</Button>
+      <Button onClick={handleExecute} disabled={loading}>
+        Execute
+      </Button>
     </div>
   )
 }
 
-function ChallengeSection({ actionId, onClick }) {
-  const [offer, setOffer] = useState('')
-  const [evidence, setEvidence] = useState('')
+type ChallengeSectionProps = {
+  actionId: string
+  onClick: Function
+}
+
+function ChallengeSection({ actionId, onClick }: ChallengeSectionProps) {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [offer, setOffer] = useState<string>('')
+  const [evidence, setEvidence] = useState<string>('')
 
   const handleChallenge = useCallback(async () => {
-    await onClick(actionId, offer, evidence)
+    setLoading(true)
+    try {
+      await onClick(actionId, offer, evidence)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
   }, [actionId, evidence, offer, onClick])
 
   return (
@@ -172,14 +211,29 @@ function ChallengeSection({ actionId, onClick }) {
           `}
         />
       </label>
-      <Button onClick={handleChallenge}>Challenge</Button>
+      <Button onClick={handleChallenge} disabled={loading}>
+        Challenge
+      </Button>
     </div>
   )
 }
 
-function DisputeSection({ actionId, onClick }) {
+type DisputeProps = {
+  actionId: string
+  onClick: Function
+}
+
+function DisputeSection({ actionId, onClick }: DisputeProps) {
+  const [loading, setLoading] = useState<boolean>(false)
   const handleDispute = useCallback(async () => {
-    await onClick(actionId)
+    setLoading(true)
+    try {
+      await onClick(actionId)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
   }, [actionId, onClick])
 
   return (
@@ -192,14 +246,29 @@ function DisputeSection({ actionId, onClick }) {
       `}
     >
       <h3> Dispute </h3>
-      <Button onClick={handleDispute}>Dispute</Button>
+      <Button onClick={handleDispute} disabled={loading}>
+        Dispute
+      </Button>
     </div>
   )
 }
 
-function SettleSection({ actionId, onClick }) {
+type SettleProps = {
+  actionId: string
+  onClick: Function
+}
+
+function SettleSection({ actionId, onClick }: SettleProps) {
+  const [loading, setLoading] = useState<boolean>(false)
   const handleSettle = useCallback(async () => {
-    await onClick(actionId)
+    setLoading(true)
+    try {
+      await onClick(actionId)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
   }, [actionId, onClick])
 
   return (
@@ -212,15 +281,24 @@ function SettleSection({ actionId, onClick }) {
       `}
     >
       <h3> Settle </h3>
-      <Button onClick={handleSettle}>Settle</Button>
+      <Button onClick={handleSettle} disabled={loading}>
+        Settle
+      </Button>
     </div>
   )
 }
 
-function Button({ children, disabled, onClick }) {
+type ButtonProps = {
+  children: React.ReactNode
+  disabled: boolean
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
+function Button({ children, disabled, onClick }: ButtonProps) {
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={onClick}
       css={`
         position: relative;

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import BN from 'bn.js'
 import { utils as EthersUtils } from 'ethers'
+import { App } from '@aragon/connect-react'
 import connectDisputableDelay from '@1hive/connect-disputable-delay'
 
 import { getExecutionTimeFromUnix } from '../../../lib/date-utils'
@@ -9,8 +10,14 @@ import { useWallet } from 'use-wallet'
 
 const ONE_MILLION = new BN('1000000000000000000000000')
 
-export function useDisputableDelay(disputableDelayApp) {
-  const [disputableDelay, setDisputableDelay] = useState(null)
+function getAppAddress(appName: string, apps: App[]) {
+  return apps!.find(app => app!.name!.includes(appName))?.address
+}
+
+export function useDisputableDelay(disputableDelayApp: any) {
+  const [disputableDelay, setDisputableDelay] = useState<Partial<App | null>>(
+    null,
+  )
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -21,14 +28,16 @@ export function useDisputableDelay(disputableDelayApp) {
     let cancelled = false
 
     async function getDisputableDelay() {
-      const disputableDelay = await connectDisputableDelay(disputableDelayApp, [
-        'thegraph',
-        {
-          network: 4,
-          subgraphUrl:
-            'https://api.thegraph.com/subgraphs/name/1hive/aragon-disputable-delay-rinkeby',
-        },
-      ])
+      const disputableDelay: any = await connectDisputableDelay(
+        disputableDelayApp,
+        [
+          'thegraph',
+          {
+            subgraphUrl:
+              'https://api.thegraph.com/subgraphs/name/1hive/aragon-disputable-delay-rinkeby',
+          },
+        ],
+      )
 
       if (!cancelled) {
         setDisputableDelay(disputableDelay)
@@ -46,7 +55,7 @@ export function useDisputableDelay(disputableDelayApp) {
   return [disputableDelay, loading]
 }
 
-export function useCollateralRequirements(disputableDelay) {
+export function useCollateralRequirements(disputableDelay: any) {
   const [collateral, setCollateral] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -73,7 +82,7 @@ export function useCollateralRequirements(disputableDelay) {
   return [collateral, loading]
 }
 
-export function useDelayedScripts(disputableDelay, apps) {
+export function useDelayedScripts(disputableDelay: any, apps: App[]) {
   const [delayedScripts, setDelayedScripts] = useState(null)
   const [delayedScriptsLoading, setDelayedScriptsLoading] = useState(true)
 
@@ -87,7 +96,7 @@ export function useDelayedScripts(disputableDelay, apps) {
     async function getDelayedScripts() {
       const delayedScripts = await disputableDelay.delayedScripts()
 
-      const processedScripts = delayedScripts.map(script => {
+      const processedScripts = delayedScripts.map((script: any) => {
         const executionDate = getExecutionTimeFromUnix(script.executionFromTime)
 
         return {
@@ -112,16 +121,15 @@ export function useDelayedScripts(disputableDelay, apps) {
   return [delayedScripts, delayedScriptsLoading]
 }
 
-export function useChallengeAction(apps, feeToken) {
+export function useChallengeAction(apps: App[], feeToken: string) {
   const { account } = useWallet()
-  const agreementAddress = apps.find(app => app.name.includes('agreement'))
-    .address
+  const agreementAddress = getAppAddress('agreement', apps)
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
   const tokenContract = useContractWithKnownAbi('TOKEN', feeToken)
 
   return useCallback(
     async (actionId, settlementOffer, evidence) => {
-      if (!agreement || !feeToken) {
+      if (!agreement || !feeToken || !tokenContract) {
         return
       }
       try {
@@ -157,16 +165,15 @@ export function useChallengeAction(apps, feeToken) {
   )
 }
 
-export function useDisputeAction(apps, feeToken) {
+export function useDisputeAction(apps: App[], feeToken: string) {
   const { account } = useWallet()
-  const agreementAddress = apps.find(app => app.name.includes('agreement'))
-    .address
+  const agreementAddress = getAppAddress('agreement', apps)
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
   const tokenContract = useContractWithKnownAbi('TOKEN', feeToken)
 
   return useCallback(
     async actionId => {
-      if (!agreement || !feeToken) {
+      if (!agreement || !feeToken || !tokenContract) {
         return
       }
       try {
@@ -194,10 +201,8 @@ export function useDisputeAction(apps, feeToken) {
   )
 }
 
-export function useExecuteScript(apps) {
-  const disputableDelayAddress = apps.find(app =>
-    app.name.includes('disputable-delay'),
-  ).address
+export function useExecuteScript(apps: App[]) {
+  const disputableDelayAddress = getAppAddress('disputable-delay', apps)
   const disputableDelay = useContractWithKnownAbi(
     'DISPUTABLE_DELAY',
     disputableDelayAddress,
@@ -224,9 +229,8 @@ export function useExecuteScript(apps) {
   )
 }
 
-export function useSettleAction(apps, feeToken) {
-  const agreementAddress = apps.find(app => app.name.includes('agreement'))
-    .address
+export function useSettleAction(apps: App[], feeToken: string) {
+  const agreementAddress = getAppAddress('agreement', apps)
   const agreement = useContractWithKnownAbi('AGREEMENT', agreementAddress)
 
   return useCallback(

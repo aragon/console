@@ -11,7 +11,7 @@ module.exports = {
     'prettier/react',
     'plugin:prettier/recommended',
   ],
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
@@ -37,6 +37,14 @@ module.exports = {
     react: {
       pragma: 'React',
       version: '16.6',
+    },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
     },
   },
   overrides: [

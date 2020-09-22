@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import { createGlobalStyle } from 'styled-components'
 import App from './App'
 import GeneralProvider from './Providers/GeneralProvider'
@@ -44,7 +44,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-ReactDOM.render(
+render(
   <GeneralProvider>
     <React.StrictMode>
       <GlobalStyle />

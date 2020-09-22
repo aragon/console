@@ -7,14 +7,14 @@ import { shortenAddress, getNetworkName } from '../../lib/web3-utils'
 
 function Header() {
   const { chainId } = useChainId()
-  const wallet = useWallet()
+  const { wallet } = useWallet()
 
   const handleWalletConnection = useCallback(() => {
     wallet.status === 'connected' ? wallet.reset() : wallet.connect('injected')
   }, [wallet])
 
   useEffect(() => {
-    if (wallet.error && wallet.error instanceof ChainUnsupportedError) {
+    if (wallet!.error && wallet!.error instanceof ChainUnsupportedError) {
       alert(
         `Wrong network. Please connect to the ${getNetworkName(
           chainId,
@@ -61,7 +61,7 @@ function Header() {
         `}
       >
         {wallet.status === 'connected'
-          ? shortenAddress(wallet.account)
+          ? shortenAddress(wallet.account!)
           : 'Connect to web3'}
       </button>
     </header>
