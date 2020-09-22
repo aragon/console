@@ -2,10 +2,10 @@ import React from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import 'styled-components/macro'
 
-import DaoSelector from './components/DaoSelector'
+import DaoSelector from './components/DaoSelector.tsx'
 import DaoView from './DaoView'
 
-import TopHeader from './components/Header/Header'
+import TopHeader from './components/Header/Header.tsx'
 
 function App() {
   return (

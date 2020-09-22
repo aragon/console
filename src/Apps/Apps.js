@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import 'styled-components/macro'
 
 // Frontends
-import Agent from './Agent/Agent'
+import Agent from './Agent/Agent.tsx'
 import Agreement from './Agreement/Agreement'
 import DisputableDelay from './DisputableDelay/DisputableDelay'
 
