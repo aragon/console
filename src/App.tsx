@@ -1,11 +1,10 @@
 import React from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import 'styled-components/macro'
-
 import DaoSelector from './components/DaoSelector'
-import DaoView from './DaoView'
-
 import TopHeader from './components/Header/Header'
+import DaoView from './DaoView/DaoView'
+import ErcTool from './Tools/Erc'
 
 function App() {
   return (
@@ -19,6 +18,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <DaoSelector />
+          </Route>
+          <Route exact path="/tools/erc">
+            <ErcTool />
           </Route>
           <Route path="/:daoAddress">
             <DaoView />

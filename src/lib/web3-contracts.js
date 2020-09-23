@@ -3,28 +3,39 @@ import {
   Contract as EthersContract,
   providers,
   utils as EthersUtils,
+  getDefaultProvider,
 } from 'ethers'
 import { useWallet } from 'use-wallet'
 import { getKnownContract } from './known-contracts.js'
+import { useChainId } from '../Providers/ChainId'
 import { bigNum, getNetworkNode } from './web3-utils'
 
 export function useContract(address, abi, signer = true) {
   const { ethereum } = useWallet()
+  const { chainId } = useChainId()
 
+  let ethersProvider
   if (!ethereum) {
-    return
+    ethersProvider = getDefaultProvider(chainId)
+  } else {
+    ethersProvider = new providers.Web3Provider(ethereum)
   }
 
-  const ethersProvider = new providers.Web3Provider(ethereum)
-
-  if (!address || !ethersProvider) {
+  if (!address || !EthersUtils.isAddress(address) || !ethersProvider) {
+    console.log(
+      'alo',
+      address,
+      EthersUtils.isAddress(address),
+      ethersProvider,
+      ethereum,
+    )
     return null
   }
 
   const contract = new EthersContract(
     address,
     abi,
-    signer ? ethersProvider.getSigner() : ethersProvider,
+    signer && ethereum ? ethersProvider.getSigner() : ethersProvider,
   )
 
   return contract
