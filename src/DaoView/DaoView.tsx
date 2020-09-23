@@ -9,10 +9,9 @@ import {
 import { App, Connect, useApps, useOrganization } from '@aragon/connect-react'
 import 'styled-components/macro'
 
-import AppsRouter from './Apps/Apps'
-import ErcTool from './Tools/Erc'
+import AppsRouter from '../Apps/Apps'
 
-import { useChainId } from './Providers/ChainId'
+import { useChainId } from '../Providers/ChainId'
 
 function DaoView() {
   const { path } = useRouteMatch()
@@ -36,10 +35,7 @@ function DaoView() {
       <Route exact path={path}>
         <AppList apps={apps} />
       </Route>
-      <Route exact path={`${path}/tools/erc`}>
-        <ErcTool />
-      </Route>
-      <Route exact path={`${path}/app/:appAddress`}>
+      <Route path={`${path}/app/:appAddress`}>
         <AppsRouter apps={apps} org={org!} />
       </Route>
       <Route>
@@ -88,7 +84,6 @@ function AppCard({ app }: AppCardProps) {
   const { url } = useRouteMatch()
 
   const handleCardClick = useCallback(() => {
-    console.log('alo?')
     history.push(`${url}/app/${app.address}`)
   }, [app, history, url])
 
