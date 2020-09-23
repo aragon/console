@@ -1,8 +1,5 @@
 import env from '../environment'
 import { utils as EthersUtils } from 'ethers'
-import { solidityKeccak256, id as keccak256 } from 'ethers/utils'
-export const soliditySha3 = solidityKeccak256
-export const hash256 = keccak256
 export const DEFAULT_LOCAL_CHAIN = 'private'
 export const ETH_FAKE_ADDRESS = `0x${''.padEnd(40, '0')}`
 
@@ -11,10 +8,6 @@ const ETH_ADDRESS_TEST_REGEX = /(0x[a-fA-F0-9]{40}(?:\b|\.|,|\?|!|;))/g
 
 export function bigNum(value) {
   return new EthersUtils.BigNumber(value)
-}
-
-export function getFunctionSignature(func) {
-  return keccak256(func).slice(0, 10)
 }
 
 export function getNetworkName(chainId) {
@@ -54,37 +47,6 @@ export function getUseWalletConnectors() {
     }
     return connectors
   }, {})
-}
-
-function toChecksumAddress(address) {
-  if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
-    throw new Error(
-      'Given address "' + address + '" is not a valid Ethereum address.',
-    )
-  }
-
-  address = address.toLowerCase().replace(/^0x/i, '')
-
-  const addressHash = keccak256(address).replace(/^0x/i, '')
-  let checksumAddress = '0x'
-
-  for (let i = 0; i < address.length; i++) {
-    // If ith character is 9 to f then make it uppercase
-    if (parseInt(addressHash[i], 16) > 7) {
-      checksumAddress += address[i].toUpperCase()
-    } else {
-      checksumAddress += address[i]
-    }
-  }
-
-  return checksumAddress
-}
-
-// Check address equality with checksums
-export function addressesEqual(first, second) {
-  first = first && toChecksumAddress(first)
-  second = second && toChecksumAddress(second)
-  return first === second
 }
 
 export const addressPattern = '(0x)?[0-9a-fA-F]{40}'
