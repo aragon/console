@@ -6,12 +6,16 @@ import { useWallet } from '../../Providers/Wallet'
 import { shortenAddress, getNetworkName } from '../../lib/web3-utils'
 
 function Header() {
-  const { chainId } = useChainId()
+  const { chainId, setChainId } = useChainId()
   const { wallet } = useWallet()
 
   const handleWalletConnection = useCallback(() => {
     wallet.status === 'connected' ? wallet.reset() : wallet.connect('injected')
   }, [wallet])
+
+  const handleChangeChain = useCallback(e => setChainId(e.target.value), [
+    setChainId,
+  ])
 
   useEffect(() => {
     if (wallet!.error && wallet!.error instanceof ChainUnsupportedError) {
@@ -27,6 +31,7 @@ function Header() {
     <header
       css={`
         display: flex;
+        justify-content: center;
         width: 100%;
         border: 1px solid whitesmoke;
         padding: 8px;
@@ -42,6 +47,17 @@ function Header() {
       >
         Aragon Console
       </h1>
+      <label
+        css={`
+          margin-right: 16px;
+        `}
+      >
+        Chain ID
+        <select value={chainId} onChange={handleChangeChain}>
+          <option value={1}>Mainnet</option>
+          <option value={4}>Rinkeby</option>
+        </select>
+      </label>
       <button
         onClick={handleWalletConnection}
         css={`
