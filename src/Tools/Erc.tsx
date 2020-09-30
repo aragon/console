@@ -9,8 +9,6 @@ export default function ErcTool() {
   const history = useHistory()
   const tokenContract = useContract(tokenAddress, ercAbi)
 
-  console.log(tokenContract)
-
   const handleChangeTokenAddress = useCallback(e => {
     setTokenAddress(e.target.value)
   }, [])
